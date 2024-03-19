@@ -1,0 +1,51 @@
+A Form {
+
+
+🔴 Fields : {
+
+Product Name 
+Product Price 
+Product Image (upto 3)
+Date From 
+Date To 
+(Range)
+
+
+
+
+> 
+
+
+🔴 UI : {
+Tabular Form 
+
+ID   : Show with each product   (6 Digits)
+Images: will e show on data bar
+Date From & To : will be (clickable👍)
+
+if Date From Clicked {
+
+alert (Show Dates From Starting Range to Ending  Range )
+
+}
+
+
+
+}
+
+}
+
+}
+
+
+
+
+⚠️ Note: [
+
+1. Data will be stored in Local Storage
+2. Dates will be proper format 
+3. if data would be change in Local Storage error will occured
+
+
+] 
+
