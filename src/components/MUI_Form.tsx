@@ -15,7 +15,7 @@ import FileUploadIcon from '@mui/icons-material/FileUpload';
 import styled from "styled-components";
 import MUIPreviewImagesBox from "./MUI_PreviewImageBox";
 import { getDataFromLocalStorage, saveDataToLocalStorage } from "../utils/LocalStorage";
-import { defaultImage } from "../utils/helper";
+import { defaultImage, getOTP } from "../utils/helper";
 // import { Link, useNavigate } from "react-router-dom";
 // import { Bounce, toast, Zoom } from "react-toastify";
 // import {
@@ -33,11 +33,9 @@ export default function SignUp() {
   // const navigate = useNavigate();
 
   // all Regex Patters
-  const namesRegex = /^(?! )(?!\s+$)[A-Za-z\s]+$/; // x2
-  const userNameRegex = /^(?! )(?!\s+$)[a-z0-9\s]+$/;
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  const passwordRegex = /^.{8,}$/;
-
+  const productNameRegex = /^[A-Za-z\s]+$/; 
+  const productPriceRegex = /^\d+$/ ;
+  
   // const [dataReady, setDataReady] = React.useState(false);
 
 
@@ -57,6 +55,10 @@ export default function SignUp() {
   
   }
   */
+
+
+
+
 
 
   const [productInfoBox, setProductInfoBox] = React.useState<any>([]);
@@ -200,7 +202,7 @@ if(
 
    
 const readyObj = {
-  randomID:1212,
+  randomID:getOTP(6),  
   productName: state?.productName,
  productPrice: state?.productPrice, 
  dateFrom : state?.dateFrom,

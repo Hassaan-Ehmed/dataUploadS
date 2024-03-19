@@ -15,12 +15,13 @@ function App() {
    <Router>
 
    <MUIAppBar/>
+
 <Routes>
 
-   <ProductsPanel/>
+   <Route path='/'  element={ <ProductsPanel/> } />
+   <Route path='/table'  element={ <ProductsTable/> } />
 
 </Routes>
-   <ProductsTable/>
    
    </Router>
     

@@ -16,6 +16,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import AddBox from '@mui/icons-material/AddBox';
+import { Link } from 'react-router-dom';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -134,8 +135,7 @@ export default function MUIAppBar() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" sx={{bgcolor:
-    "green"}}>
+      <AppBar position="static" sx={{bgcolor: "green"}}>        
         <Toolbar>
           
           <Typography
@@ -144,13 +144,14 @@ export default function MUIAppBar() {
             component="div"
             sx={{ display: { xs: 'none', sm: 'block' } }}
           >
-            Form
+                <Link to={'/'} style={{color:"white",textDecoration:"none"}}>Form</Link>
+
           </Typography>
           
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-               Table
+            <Link to={'/table'} style={{color:"white",textDecoration:"none"}}>Table</Link>
             </IconButton>
            
             <IconButton
@@ -162,7 +163,10 @@ export default function MUIAppBar() {
 
               color="inherit"
             >
+               <Link to={'/'} style={{color:"white",textDecoration:"none"}}>
               <AddBox/>
+               </Link>
+
             </IconButton>
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>

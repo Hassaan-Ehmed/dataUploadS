@@ -6,6 +6,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { getDataFromLocalStorage } from '../utils/LocalStorage';
+import { Avatar, AvatarGroup } from '@mui/material';
+import { defaultImage } from '../utils/helper';
 
 function createData(
   name: string,
@@ -25,32 +28,104 @@ const rows = [
   createData('Gingerbread', 356, 16.0, 49, 3.9),
 ];
 
+
 export default function MUITable() {
+
+
+const [products,setProducts] = React.useState([]);
+
+  React.useEffect(()=>{
+
+    let products  =  getDataFromLocalStorage("products");
+
+    if(products){
+
+      setProducts(products);
+    }
+
+
+  },[]);
+
+
+
+
+  const createProductImages=(sourcePacket:any)=>{
+
+if(sourcePacket.source1[0] === "d"){
+
+  if(sourcePacket.source2[0] === "d"){
+
+    if(sourcePacket.source3[0] === "d"){
+
+      return <AvatarGroup max={3}>
+
+      <Avatar alt="" src={sourcePacket.source1}/>
+      <Avatar alt="" src={sourcePacket.source2}/>
+      <Avatar alt="" src={sourcePacket.source3}/>
+    </AvatarGroup>
+
+    }
+    
+    
+else{
+
+  
+return <AvatarGroup max={3}>
+
+    <Avatar alt="" src={sourcePacket.source1}/>
+    <Avatar alt="" src={sourcePacket.source2}/>
+  </AvatarGroup>
+              
+    }
+
+  }else{
+    return  <AvatarGroup max={3}>
+ 
+    <Avatar alt="" src={sourcePacket.source1} />
+
+   </AvatarGroup>
+
+  }
+
+}else{
+ return  <AvatarGroup max={3}>
+ 
+          <Avatar alt="" src={defaultImage} />
+
+         </AvatarGroup>
+                  
+}
+
+  }
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <Table sx={{ minWidth: 550 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>Dessert (100g serving)</TableCell>
-            <TableCell align="right">Calories</TableCell>
-            <TableCell align="right">Fat&nbsp;(g)</TableCell>
-            <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-            <TableCell align="right">Protein&nbsp;(g)</TableCell>
+            <TableCell>Product Id</TableCell>
+            <TableCell align="right">Product Images</TableCell>
+            <TableCell align="right">Product Name</TableCell>
+            <TableCell align="right">Product Price</TableCell>
+            <TableCell align="right">Date From</TableCell>
+            <TableCell align="right">Date To</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {products.map((row:any,idX:number) => (
             <TableRow
-              key={row.name}
+              key={idX}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                {row.name}
-              </TableCell>
-              <TableCell align="right">{row.calories}</TableCell>
-              <TableCell align="right">{row.fat}</TableCell>
-              <TableCell align="right">{row.carbs}</TableCell>
-              <TableCell align="right">{row.protein}</TableCell>
+                {row.randomID}
+              </TableCell>  
+              <TableCell align="right">
+                {createProductImages(row.imageSources)}
+                </TableCell>
+              <TableCell align="right">{row.productName}</TableCell>
+              <TableCell align="right">{row.productPrice}</TableCell>
+              <TableCell align="right">{row.dateFrom}</TableCell>
+              <TableCell align="right">{row.dateTo}</TableCell>
             </TableRow>
           ))}
         </TableBody>
