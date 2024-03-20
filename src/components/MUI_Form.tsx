@@ -1,5 +1,5 @@
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { Link as MUILink } from "@mui/material";
+import { Link as MUILink, Tooltip, Zoom } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import Box from "@mui/material/Box";
@@ -33,8 +33,8 @@ export default function SignUp() {
   // const navigate = useNavigate();
 
   // all Regex Patters
-  const productNameRegex = /^[A-Za-z\s]+$/; 
-  const productPriceRegex = /^\d+$/ ;
+  const productNameRegex = /^[A-Za-z]+(?:\s[A-Za-z]+)*$/; 
+  const productPriceRegex = /^\d+(?:\s\d+)*$/ ;
   
   // const [dataReady, setDataReady] = React.useState(false);
 
@@ -57,11 +57,8 @@ export default function SignUp() {
   */
 
 
-
-
-
-
   const [productInfoBox, setProductInfoBox] = React.useState<any>([]);
+  const [id,setId] = React.useState<any>(0)
 
 
   // Current States
@@ -72,8 +69,8 @@ export default function SignUp() {
       // Input Fields
       productName: "",
       productPrice: "",
-      dateFrom: "2000-04-1",
-      dateTo: "2012-07-1",
+      dateFrom: `${new Date().getFullYear()-1}-01-01`,
+      dateTo: `${new Date().getFullYear()}-0${new Date().getMonth()+1}-${new Date().getDate()}`,
       base64Buffers:{
         source1:"",
         source2:"",
@@ -82,24 +79,57 @@ export default function SignUp() {
   
 
       // Input Fields Error
-      fNameError: false,
-      lNameError: false,
-      uNameError: false,
-      emailError: false,
-      passwordError: false,
-      cityError: false,
+      productNameError: false,
+      productPriceError: false,
+      dateFromError: false,
+      dateToError: false,
 
       // Checks
-      fNameCheck: false,
-      lNameCheck: false,
-      uNameCheck: false,
-      emailCheck: false,
-      passwordCheck: false,
-      cityCheck: false,
+      productNameCheck: false,
+      productPriceCheck: false,
     }
   );
 
   React.useEffect(()=>{
+
+
+    if(state?.productName && state.productNameCheck ){
+
+      if(state.productName.match(productNameRegex)){
+        setState({productNameError:false});
+      }else{
+        setState({productNameError:true});
+        
+      }
+    }
+
+    if(state?.productPrice && state.productPriceCheck){
+
+      if(state.productPrice.match(productPriceRegex)){
+        setState({productPriceError:false});
+      }else{
+        setState({productPriceError:true});
+        
+      }
+    }
+
+
+    if(state.dateFrom > state.dateTo ){
+      setState({dateFromError:true});
+    }else{
+      
+      setState({dateFromError:false});
+    }
+
+    if(state.dateTo < state.dateFrom ){
+      setState({dateToError:true});
+    }else{
+      
+      setState({dateToError:false});
+    }
+    
+
+
 
     let products = getDataFromLocalStorage("products");
     
@@ -112,9 +142,10 @@ export default function SignUp() {
     }
     
     
-    },[])
+    },[state.productName,state.productPrice,state.dateFrom,state.dateTo])
 
-  // React.useEffect(()=>  console.log("Image Source",base64Buffers.source1) ,[base64String]);
+    
+  React.useEffect(()=> { handleID() },[]);
 
 
   const VisuallyHiddenInput = styled('input')({
@@ -130,9 +161,7 @@ export default function SignUp() {
   });
   
 
-
-
-  const handleImage = (event:any) =>{
+  const handleImage = (event:any,imageNumber:any) =>{
     
     
     const file = event?.target?.files[0]
@@ -148,31 +177,27 @@ export default function SignUp() {
         if(typeof result === 'string'){
           
 
-          if(state.base64Buffers.source1 === "" ){
 
-            setState({base64Buffers:{
-              ...state.base64Buffers,
-              source1:result
-            }});
-
-          }else if (state.base64Buffers.source2 === ""){
+          if(imageNumber === "image1"){
+            alert("Image 1")
+          }else if(imageNumber === "image2"){
+            alert("Image 2")
+          
+          }else if(imageNumber === "image3"){
+            alert("Image 3")
             
-            setState({base64Buffers:{
-              ...state.base64Buffers,
-              source2:result
-            }});
-
-
           }
-          else if (state.base64Buffers.source3 === ""){
-    
-            setState({base64Buffers:{
-              ...state.base64Buffers,
-              source3:result
-            }});
 
 
-          }
+          // if(state.base64Buffers.source1 === "" ){
+
+          //   setState({base64Buffers:{
+          //     ...state.base64Buffers,
+          //     source1:result
+          //   }});
+
+          // }
+        
 
         }
       
@@ -188,7 +213,7 @@ export default function SignUp() {
 
  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 
-
+event.preventDefault()
 
 if(
 
@@ -202,7 +227,7 @@ if(
 
    
 const readyObj = {
-  randomID:getOTP(6),  
+  randomID:id,  
   productName: state?.productName,
  productPrice: state?.productPrice, 
  dateFrom : state?.dateFrom,
@@ -215,11 +240,36 @@ const readyObj = {
 
 }
 
-saveDataToLocalStorage("products",[...productInfoBox,readyObj])
+saveDataToLocalStorage("products",[...productInfoBox,readyObj]);
+setState({
+  productName: "",
+  productPrice: "",
+  dateFrom: `${new Date().getFullYear()-1}-01-01`,
+  dateTo: `${new Date().getFullYear()}-0${new Date().getMonth()+1}-${new Date().getDate()}`,
+  base64Buffers:{
+    source1:"",
+    source2:"",
+    source3:""
+  },
+})
+
     
+  }else{
+    return 
   }
 
  }
+
+
+ const handleID=()=>{
+
+      const ID = getOTP(6);
+
+      setId(ID);
+      return ID;
+
+ }
+ 
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
@@ -253,31 +303,61 @@ saveDataToLocalStorage("products",[...productInfoBox,readyObj])
                   required
                   fullWidth
                   id="productName"
-                  error={state?.uNameError ? true : false}
+                  error={state?.productNameError ? true : false}
                   label="Prodcut Name"
                   name="productName"
                   autoComplete="product name"
-                   helperText={ state?.uNameError ? "username must be lowercase & numbers" :  ""}
+                   helperText={ state?.productNameError ? "Name must only be letters" :  ""}
                   onChange={(e) => {
                     setState({ productName: e?.target?.value });
-                    setState({ uNameCheck: true });
+                    setState({ productNameCheck: true });
                   }}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={9}>
                 <TextField
-                  value={state?.productPrice ?? ""}
+                inputProps={{
+                  pattern:"[0-9]*"
+                }}
+                  value={state?.productPrice || ""}
                   required
                   fullWidth
                   id="productPrice"
-                  error={state?.emailError ? true : false}
+                  error={state?.productPriceError ? true : false}
                   label="Prodcut Price"
                   name="productPrice"
                   autoComplete="product price"
-                  helperText={ state?.emailError ? "incorrect email pattern" :  ""}
+                  // helperText={ state?.productPriceError ? "Price must be in Numbers" :  ""}
+                  onChange={(e) => {
+
+                    const userInput = e?.target?.value;
+                    const numbersOnly = userInput.replace(/[^0-9]/g, ''); 
+                    let formattedPrice;
+
+                    if(numbersOnly === ''){
+                      
+                       formattedPrice = 0
+                    }else{
+                      formattedPrice  = parseInt(numbersOnly).toLocaleString() || "";
+                    }
+                    
+                  
+                    setState({ productPrice:formattedPrice});
+                    setState({ productPriceCheck: true });
+                  }}
+                />
+              </Grid>
+              <Grid item xs={3}>
+                <TextField
+                disabled
+                  value={id}
+                  required
+                  fullWidth
+                  label="Id"
+                  autoComplete="product price"
                   onChange={(e) => {
                     setState({ productPrice: e?.target?.value });
-                    setState({ emailCheck: true });
+                    setState({ productPriceCheck: true });
                   }}
                 />
               </Grid>
@@ -298,11 +378,13 @@ saveDataToLocalStorage("products",[...productInfoBox,readyObj])
                 
                 
                 >Date From</label>
+               
+              
+                <Tooltip TransitionComponent={Zoom} title={ state?.dateFromError && "Starting Date must be less than end Date" } placement="left">
                 <input
                   type="date"
                   value={state?.dateFrom}
-                  min="1960-01-01"
-                  max={`${new Date().getFullYear()-4}-12-31`}
+
                   style={{
                     width: "100%",
                     height: "100%",
@@ -310,21 +392,23 @@ saveDataToLocalStorage("products",[...productInfoBox,readyObj])
                     cursor: "pointer",
                     borderRadius: "5px",
                     position:"relative",
-                    border: state?.dateError
-                      ? "1px solid red"
-                      : "1px solid #bcbaba",
+                    border: state?.dateFromError
+                    ? "1px solid red"
+                    : "1px solid #bcbaba",
                   }}
                   onChange={(e) => {
                     setState({ dateFrom: e?.target?.value });
-                    setState({ dateCheck: true });
+                    
                   }}
-                />
+                  />
+                  </Tooltip>
+
               </Grid>
 
               <Grid item xs={12} sm={6} sx={{ position: "relative" }}>
                 <label 
                 
-                style={{
+                  style={{
                   backgroundColor:"white",
                   position:"absolute",
                   zIndex:2,
@@ -337,29 +421,31 @@ saveDataToLocalStorage("products",[...productInfoBox,readyObj])
                 
                 
                 >Date To</label>
-                <input
+                                <Tooltip TransitionComponent={Zoom} title={ state?.dateToError && "End Date must be greater than starting Date" } placement="right">
+                                  
+                                  
+                  <input
                   type="date"
                   value={state?.dateTo}
-                  min="1960-01-01"
-                  max={`${new Date().getFullYear()-4}-12-31`}
                   style={{
                     width: "100%",
                     height: "100%",
                     cursor: "pointer",
                     borderRadius: "5px",
                     position:"relative",
-                    border: state?.dateError
+                    border: state?.dateToError
                       ? "1px solid red"
                       : "1px solid #bcbaba",
                   }}
                   onChange={(e) => {
                     setState({ dateTo: e?.target?.value });
-                    setState({ dateCheck: true });
+            
                   }}
                 />
+                </Tooltip>
+
               </Grid>
-              <Grid item xs={12} sm={12}>
-                
+              {/* <Grid item xs={12} sm={12}>
 
               <Button
               component="label"
@@ -380,12 +466,10 @@ saveDataToLocalStorage("products",[...productInfoBox,readyObj])
               Upload Image
               <VisuallyHiddenInput type="file" multiple onChange={handleImage}/>
             </Button>
-               </Grid> 
-
-
+               </Grid>  */}
               <Grid item xs={12} sm={12}>
                 
-<MUIPreviewImagesBox imageSource={state.base64Buffers}/>
+<MUIPreviewImagesBox imageSource={state?.base64Buffers}  handleImage={handleImage}/>
           
                </Grid> 
 

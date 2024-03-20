@@ -71,21 +71,24 @@ const ImageMarked = styled('span')(({ theme }) => ({
   transition: theme.transitions.create('opacity'),
 }));
 
-export default function MUIPreviewImagesBox({imageSource}:any) {
+export default function MUIPreviewImagesBox({imageSource,handleImage}:any) {
 
 
   const images = [
     {
+      name:"image1",
       url: imageSource.source1 || "https://www.shutterstock.com/image-vector/default-ui-image-placeholder-wireframes-600nw-1037719192.jpg",
       title: 'Breakfast',
       width: '30%',
     },
     {
+      name:"image2",
       url: imageSource.source2 || 'https://www.shutterstock.com/image-vector/default-ui-image-placeholder-wireframes-600nw-1037719192.jpg',
       title: 'Burgers',
       width: '30%',
     },
     {
+      name:"image3",
       url:  imageSource.source3 ||'https://www.shutterstock.com/image-vector/default-ui-image-placeholder-wireframes-600nw-1037719192.jpg',
       title: 'Camera',
       width: '30%',
@@ -94,16 +97,17 @@ export default function MUIPreviewImagesBox({imageSource}:any) {
 
 
   return (
-    <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 300, width: '100%' ,}}>
+    <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 300, width: '100%' ,border:"2px dotted black"}}>
       {images.map((image) => (
         <ImageButton
-          // focusRipple
-          disabled
+          focusRipple
           key={image.title}
           style={{
             width: image.width,
           }}
+          onClick={()=>handleImage(image.name)}
         >
+          
           <ImageSrc style={{ backgroundImage: `url(${image.url})` }} />
           <ImageBackdrop className="MuiImageBackdrop-root" />
           <Image>

@@ -9,6 +9,7 @@ import Paper from '@mui/material/Paper';
 import { getDataFromLocalStorage } from '../utils/LocalStorage';
 import { Avatar, AvatarGroup } from '@mui/material';
 import { defaultImage } from '../utils/helper';
+import MUIDialog from './MUI_Dialog';
 
 function createData(
   name: string,
@@ -28,75 +29,110 @@ const rows = [
   createData('Gingerbread', 356, 16.0, 49, 3.9),
 ];
 
-
 export default function MUITable() {
 
+    const [open, setOpen] = React.useState(false);
+    const [products,setProducts] = React.useState<any>([]);
+    const [rangeOfDates,setRangeOfDates] = React.useState<any>([]) ;
 
-const [products,setProducts] = React.useState([]);
-
-  React.useEffect(()=>{
-
-    let products  =  getDataFromLocalStorage("products");
-
-    if(products){
-
-      setProducts(products);
-    }
-
-
-  },[]);
-
-
-
-
-  const createProductImages=(sourcePacket:any)=>{
-
-if(sourcePacket.source1[0] === "d"){
-
-  if(sourcePacket.source2[0] === "d"){
-
-    if(sourcePacket.source3[0] === "d"){
-
-      return <AvatarGroup max={3}>
-
+    React.useEffect(()=>{
+  
+      let products  =  getDataFromLocalStorage("products");
+  
+      if(products){
+  
+        setProducts(products);
+      }
+  
+  
+    },[]);
+  
+  
+  
+  
+    const createProductImages=(sourcePacket:any)=>{
+  
+  if(sourcePacket.source1[0] === "d"){
+  
+    if(sourcePacket.source2[0] === "d"){
+  
+      if(sourcePacket.source3[0] === "d"){
+  
+        return <AvatarGroup max={3}>
+  
+        <Avatar alt="" src={sourcePacket.source1}/>
+        <Avatar alt="" src={sourcePacket.source2}/>
+        <Avatar alt="" src={sourcePacket.source3}/>
+      </AvatarGroup>
+  
+      }
+      
+      
+  else{
+  
+    
+  return <AvatarGroup max={3}>
+  
       <Avatar alt="" src={sourcePacket.source1}/>
       <Avatar alt="" src={sourcePacket.source2}/>
-      <Avatar alt="" src={sourcePacket.source3}/>
     </AvatarGroup>
-
-    }
-    
-    
-else{
-
+                
+      }
   
-return <AvatarGroup max={3}>
-
-    <Avatar alt="" src={sourcePacket.source1}/>
-    <Avatar alt="" src={sourcePacket.source2}/>
-  </AvatarGroup>
-              
+    }else{
+      return  <AvatarGroup max={3}>
+   
+      <Avatar alt="" src={sourcePacket.source1} />
+  
+     </AvatarGroup>
+  
+    }
+  
+  }else{
+   return  <AvatarGroup max={3}>
+   
+            <Avatar alt="" src={defaultImage} />
+  
+           </AvatarGroup>
+                    
+  }
+  
     }
 
-  }else{
-    return  <AvatarGroup max={3}>
- 
-    <Avatar alt="" src={sourcePacket.source1} />
 
-   </AvatarGroup>
+    const handleClickOpen = () => {
+        setOpen(true);
+      };
+      const handleClose = () => {
+        setOpen(false);
+      };
 
+      
+
+const displayDates = (startDateString:any,endDateString:any) => {
+
+   // Parse the strings into Date objects
+  const startDate = new Date(startDateString);
+  const endDate = new Date(endDateString);
+
+  if (startDate > endDate) {
+    // Handle case where start date is after end date
+    throw new Error("Start date cannot be after end date.");
   }
 
-}else{
- return  <AvatarGroup max={3}>
- 
-          <Avatar alt="" src={defaultImage} />
+  const dates = [];
+  const currentDate = new Date(startDate);
 
-         </AvatarGroup>
-                  
+  while (currentDate <= endDate) {
+    dates.push(currentDate.toISOString().slice(0, 10));
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+
+  setRangeOfDates(dates);
+  console.log("dates",dates);
+  handleClickOpen()
+
 }
-
-  }
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 550 }} aria-label="simple table">
@@ -106,8 +142,7 @@ return <AvatarGroup max={3}>
             <TableCell align="right">Product Images</TableCell>
             <TableCell align="right">Product Name</TableCell>
             <TableCell align="right">Product Price</TableCell>
-            <TableCell align="right">Date From</TableCell>
-            <TableCell align="right">Date To</TableCell>
+            <TableCell align="right">Date</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -124,11 +159,12 @@ return <AvatarGroup max={3}>
                 </TableCell>
               <TableCell align="right">{row.productName}</TableCell>
               <TableCell align="right">{row.productPrice}</TableCell>
-              <TableCell align="right">{row.dateFrom}</TableCell>
-              <TableCell align="right">{row.dateTo}</TableCell>
+              <TableCell align="right" > <span onClick={()=>displayDates(row.dateFrom,row.dateTo)} style={{cursor:"pointer"}}>{row.dateFrom} - {row.dateTo}</span> </TableCell>
+             
             </TableRow>
           ))}
         </TableBody>
+        <MUIDialog handleClose={handleClose} handleClickOpen={handleClickOpen} open={open} setOpen={setOpen} rangeOfDates={rangeOfDates}/>
       </Table>
     </TableContainer>
   );

@@ -16,6 +16,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import AddBox from '@mui/icons-material/AddBox';
+import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 import { Link } from 'react-router-dom';
 
 const Search = styled('div')(({ theme }) => ({
@@ -66,6 +67,8 @@ export default function MUIAppBar() {
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
+const currentURL = window.location.pathname
+
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -107,7 +110,8 @@ export default function MUIAppBar() {
 
   const mobileMenuId = 'primary-search-account-menu-mobile';
   const renderMobileMenu = (
-    <Menu
+      <Link to={currentURL === "/" ? '/table' : "/"} style={{color:"black",textDecoration:"none"}}>
+      <Menu
       anchorEl={mobileMoreAnchorEl}
       anchorOrigin={{
         vertical: 'top',
@@ -124,13 +128,16 @@ export default function MUIAppBar() {
     >
       <MenuItem>
         <IconButton size="large" aria-label="show 4 new mails" color="inherit" />
+
+            
+        {currentURL === "/"  ? (<TextSnippetIcon/>) :  (<AddBox/>)}
          
-            <AddBox/>
          
-        <p>Create</p>
+            <p>{currentURL === "/"  ? "Table" :  "Create"}</p> 
       </MenuItem>
    
     </Menu>
+        </Link>
   );
 
   return (

@@ -1,51 +1,125 @@
-A Form {
+  let extra_toppings: [
 
 
-🔴 Fields : {
+      "Meats",
 
-Product Name 
-Product Price 
-Product Image (upto 3)
-Date From 
-Date To 
-(Range)
+      "Mangal Sujuk",
+
+      "Beef Ham",
+
+      "Smoked Chicken Breast",
+
+      "Beef Doner Meat",
+
+      "Tuna Fish",
+
+      "Chicken Slices",
+
+      "Sauces and Condiments",
+
+      "Mayonnaise",
+
+      "BBQ Sauce",
+
+      "Vegetables",
+
+      "Roasted Red Pepper",
+
+      "Red Pepper Flakes",
+
+      "Jalapeno Peppers",
+
+      "Green Peppers",
+
+      "Mushrooms",
+
+      "Black Olives",
+
+      "Sweetcorn",
+
+      "Tomatoes",
+
+      "Pineapple",
+
+      "Onions",
+
+      "Herbs",
+
+      "Sesame",
+
+      "Oregano",
+
+    ]
+
+let standard_toppings = [
+
+"Meatballs",
+"Miyo",
+"Pepporani",
+"Sauce",
+"Fries",
+"Steak"
+]
 
 
 
 
-> 
+if price by size changed !orignial so
+
+sized price reflect
 
 
-🔴 UI : {
-Tabular Form 
 
-ID   : Show with each product   (6 Digits)
-Images: will e show on data bar
-Date From & To : will be (clickable👍)
 
-if Date From Clicked {
 
-alert (Show Dates From Starting Range to Ending  Range )
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Points:{
+
+
+Dates🔴 [Limit Destroy,{
+
+1. if Date Start selected (date end start's start with date start + 1);
+
+2. if Date End selected (date start ends's start with date end start's - 1);
+
+
+}]
+
+ 🔴 Remove Upload Image Button
+
+Upload Img🔴 Go and enable images Slide and make clickable with each his own also[Edit option,remove option,single image each when choose file,file type must be image,required->atleast 1 image to required,dotted-border,remove default image]
 }
-
-
-
-}
-
-}
-
-}
-
-
-
-
-⚠️ Note: [
-
-1. Data will be stored in Local Storage
-2. Dates will be proper format 
-3. if data would be change in Local Storage error will occured
-
-
-] 
-
