@@ -1,15 +1,1 @@
-
-Points:{
-
-
-Dates🔴 [Limit Destroy,{
-
-1. if Date Start selected (date end start's start with date start + 1);
-
-2. if Date End selected (date start ends's start with date end start's - 1);
-
-
-}]
-
-Upload Img🔴also[Edit option,remove option,single image each when choose file,file type must be image,required->atleast 1 image to required,dotted-border,remove default image]
-}
+Product Image Rendering Problem on Table page

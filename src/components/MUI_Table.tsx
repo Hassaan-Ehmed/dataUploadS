@@ -48,10 +48,15 @@ export default function MUITable() {
     },[]);
   
   
+
+    const littleImage=(clickedImage:any)=>{
+
+    }
   
   
     const createProductImages=(sourcePacket:any)=>{
   
+
   if(sourcePacket.source1[0] === "d"){
   
     if(sourcePacket.source2[0] === "d"){
@@ -60,9 +65,9 @@ export default function MUITable() {
   
         return <AvatarGroup max={3}>
   
-        <Avatar alt="" src={sourcePacket.source1}/>
-        <Avatar alt="" src={sourcePacket.source2}/>
-        <Avatar alt="" src={sourcePacket.source3}/>
+        <Avatar sx={{cursor:"pointer"}} alt="" src={sourcePacket.source1} onClick={()=>littleImage(sourcePacket.source1)}/>
+        <Avatar sx={{cursor:"pointer"}} alt="" src={sourcePacket.source2} onClick={()=>littleImage(sourcePacket.source2)}/>
+        <Avatar sx={{cursor:"pointer"}} alt="" src={sourcePacket.source3} onClick={()=>littleImage(sourcePacket.source3)}/>
       </AvatarGroup>
   
       }
@@ -73,8 +78,8 @@ export default function MUITable() {
     
   return <AvatarGroup max={3}>
   
-      <Avatar alt="" src={sourcePacket.source1}/>
-      <Avatar alt="" src={sourcePacket.source2}/>
+      <Avatar sx={{cursor:"pointer"}} alt="" src={sourcePacket.source1} onClick={()=>littleImage(sourcePacket.source1)}/>
+      <Avatar sx={{cursor:"pointer"}} alt="" src={sourcePacket.source2} onClick={()=>littleImage(sourcePacket.source2)}/>
     </AvatarGroup>
                 
       }
@@ -82,21 +87,13 @@ export default function MUITable() {
     }else{
       return  <AvatarGroup max={3}>
    
-      <Avatar alt="" src={sourcePacket.source1} />
+      <Avatar sx={{cursor:"pointer"}} alt="" src={sourcePacket.source1} onClick={()=>littleImage(sourcePacket.source1)} />
   
      </AvatarGroup>
   
     }
   
-  }else{
-   return  <AvatarGroup max={3}>
-   
-            <Avatar alt="" src={defaultImage} />
-  
-           </AvatarGroup>
-                    
   }
-  
     }
 
 
@@ -129,7 +126,7 @@ const displayDates = (startDateString:any,endDateString:any) => {
   }
 
   setRangeOfDates(dates);
-  console.log("dates",dates);
+
   handleClickOpen()
 
 }

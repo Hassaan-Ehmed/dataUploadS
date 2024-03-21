@@ -10,10 +10,9 @@ export const getOTP = (length:number) => {
 
 for(let i=0; i<length; i++){
 
-    let randomNumber = Math.floor(Math.random() * 10)
-
+    let randomNumber = Math.floor(Math.random() * 10);
+    
     OTP =  OTP+randomNumber.toString();
-
 
 }
 

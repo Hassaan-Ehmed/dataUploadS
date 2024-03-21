@@ -58,7 +58,8 @@ export default function SignUp() {
 
 
   const [productInfoBox, setProductInfoBox] = React.useState<any>([]);
-  const [id,setId] = React.useState<any>(0)
+  const [id,setId] = React.useState<any>(0);
+  
 
 
   // Current States
@@ -69,7 +70,9 @@ export default function SignUp() {
       // Input Fields
       productName: "",
       productPrice: "",
-      dateFrom: `${new Date().getFullYear()-1}-01-01`,
+      dateFrom: `${new Date().getFullYear()}-0${new Date().getMonth()+1}-${new Date().getDate()}`
+,      //`${new Date().getFullYear()-1}-01-01`,
+      
       dateTo: `${new Date().getFullYear()}-0${new Date().getMonth()+1}-${new Date().getDate()}`,
       base64Buffers:{
         source1:"",
@@ -83,10 +86,12 @@ export default function SignUp() {
       productPriceError :false,
       dateFromError: false,
       dateToError: false,
+      imageError:false,
 
       // Checks
       productNameCheck: false,
       productPriceCheck: false,
+
     }
   );
 
@@ -104,20 +109,24 @@ export default function SignUp() {
     }
 
 
-    console.log("Product Price",typeof state.productPrice);
+    if(state?.productPriceCheck){
 
-    if(state?.productPrice === "" && state?.productPriceCheck){
+      if(state.productPrice === ''){
 
         setState({productPriceError:true});
-      
-      }
-      else{
         
+      }else{
         setState({productPriceError:false});
-    }
+
+      }
+      }
+     
+
 
 
     if(state.dateFrom > state.dateTo ){
+
+     
       setState({dateFromError:true});
     }else{
       
@@ -130,6 +139,13 @@ export default function SignUp() {
       
       setState({dateToError:false});
     }
+
+     if((state.base64Buffers.source1 !== '') || (state.base64Buffers.source2 !== '') || (state.base64Buffers.source3 !== '')){
+
+
+      // alert("OBject Det")
+      setState({imageError:false});
+     }
     
     let products = getDataFromLocalStorage("products");
     
@@ -142,7 +158,7 @@ export default function SignUp() {
     }
     
     
-    },[state.productName,state.productPrice,state.dateFrom,state.dateTo])
+    },[state.productName,state.productPrice,state.dateFrom,state.dateTo,state.base64Buffers.source1,state.base64Buffers.source2,state.base64Buffers.source3])
 
     
   React.useEffect(()=> { handleID() },[]);
@@ -162,16 +178,9 @@ export default function SignUp() {
   
 
   const handleImage = (event:any,imageNumber:any) =>{
-    if(imageNumber === "image1"){
-      alert("Image 1")
-    }else if(imageNumber === "image2"){
-      alert("Image 2")
-    
-    }else if(imageNumber === "image3"){
-      alert("Image 3")
-      
-    }
-    
+ 
+    // alert("Hellooooooo");
+    if (event && event.target && event.target.files && event.target.files[0]) {
     const file = event?.target?.files[0]
     
     if(file && file instanceof Blob){
@@ -184,18 +193,45 @@ export default function SignUp() {
 
         if(typeof result === 'string'){
           
+          if(imageNumber === "image1" ){
 
+            
+            setState({base64Buffers:{
+              ...state.base64Buffers,
+              source1:""
+            }});
+            setState({base64Buffers:{
+              ...state.base64Buffers,
+              source1:result
+            }});
 
-          // if(state.base64Buffers.source1 === "" ){
+          }
+          if(imageNumber === "image2" ){
 
-          //   setState({base64Buffers:{
-          //     ...state.base64Buffers,
-          //     source1:result
-          //   }});
+            setState({base64Buffers:{
+              ...state.base64Buffers,
+              source2:""
+            }});
+            setState({base64Buffers:{
+              ...state.base64Buffers,
+              source2:result
+            }});
 
-          // }
+          }
+          if(imageNumber === "image3" ){
+
+            setState({base64Buffers:{
+              ...state.base64Buffers,
+              source3:""
+            }});
+         
+            setState({base64Buffers:{
+              ...state.base64Buffers,
+              source3:result
+            }});
+
+          }
         
-
         }
       
       }
@@ -204,7 +240,7 @@ export default function SignUp() {
 
     
     }
-    
+  }
   }
 
 
@@ -214,14 +250,15 @@ event.preventDefault()
 
 
 
-if(state?.productName){
+
+if(state?.productName && state.productName.match(productNameRegex)){
 setState({productNameError:false})
 }else{
 
-  setState({productNameError:true})
+  setState({productNameError:true});
 }
 
-if(state?.productPrice){
+if(state?.productPrice !== ""){
 setState({productPriceError:false})
 }else{
 
@@ -230,16 +267,36 @@ setState({productPriceError:false})
 
 
 if(
+(  state.base64Buffers.source1 === "" 
+   && state.base64Buffers.source2 === "" 
+   && state.base64Buffers.source3 === "" 
+)
+
+
+   ){
+
+  setState({imageError:true});
+  
+
+}else{
+
+  setState({imageError:false});
+
+if(
 
   state?.productName &&
   state?.productPrice &&
   state?.dateFrom &&
-  state?.dateTo 
+  state?.dateTo &&
+  ((state.productNameError == false) 
+  &&  (state?.productPriceError == false) 
+  && (state?.imageError == false)
+  && (state?.dateFromError == false && state?.dateToError == false)
+  ) 
 
   )
   {
 
-   
 const readyObj = {
   randomID:id,  
   productName: state?.productName,
@@ -265,15 +322,16 @@ setState({
     source2:"",
     source3:""
   },
-})
 
-    
+  productPriceCheck:false
+});
+
   }else{
     return 
   }
 
  }
-
+}
 
  const handleID=()=>{
 
@@ -284,6 +342,29 @@ setState({
 
  }
  
+ const cancelImage=(imageNumber:string)=>{
+
+if(imageNumber === 'image1'){
+  setState({base64Buffers:{
+    ...state?.base64Buffers,
+    source1:""
+  }})
+}else if (imageNumber === "image2"){
+
+  setState({base64Buffers:{
+    ...state?.base64Buffers,
+    source2:""
+  }})
+}
+else if (imageNumber === "image3"){
+
+  setState({base64Buffers:{
+    ...state?.base64Buffers,
+    source3:""
+  }})
+}
+
+ }
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
@@ -322,7 +403,7 @@ setState({
                   label="Prodcut Name"
                   name="productName"
                   autoComplete="product name"
-                   helperText={ state?.productNameError ? "Name must only be letters" :  ""}
+                   helperText={ (state?.productNameError && state.productName === "") ?  "Product name must be filled" : (state.productNameError && state.productName !== "") ? "Name must only be letters" : ""}
                   onChange={(e) => {
                     setState({ productName: e?.target?.value });
                     setState({ productNameCheck: true });
@@ -364,12 +445,15 @@ setState({
               </Grid>
               <Grid item xs={3}>
                 <TextField
-                disabled
+                InputProps={{
+                  readOnly:true
+                }}
                   value={id}
                   required
                   fullWidth
                   label="Id"
                   autoComplete="product price"
+                
                   onChange={(e) => {
                     setState({ productPrice: e?.target?.value });
                     setState({ productPriceCheck: true });
@@ -398,8 +482,9 @@ setState({
                 <Tooltip TransitionComponent={Zoom} title={ state?.dateFromError && "Starting Date must be less than end Date" } placement="left">
                 <input
                   type="date"
+                  // max={state?.dateTo}
                   value={state?.dateFrom}
-
+                  min={`${new Date().getFullYear()}-0${new Date().getMonth()+1}-${new Date().getDate()}`}
                   style={{
                     width: "100%",
                     height: "100%",
@@ -441,6 +526,7 @@ setState({
                                   
                   <input
                   type="date"
+                  min={ state?.dateFrom }
                   value={state?.dateTo}
                   style={{
                     width: "100%",
@@ -484,7 +570,7 @@ setState({
                </Grid>  */}
               <Grid item xs={12} sm={12}>
                 
-<MUIPreviewImagesBox imageSource={state?.base64Buffers}  handleImage={handleImage}/>
+<MUIPreviewImagesBox imageSource={state?.base64Buffers}  handleImage={handleImage} cancelImage={cancelImage} imageError={state.imageError}/>
           
                </Grid> 
 
