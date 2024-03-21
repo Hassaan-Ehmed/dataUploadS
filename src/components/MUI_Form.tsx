@@ -80,7 +80,7 @@ export default function SignUp() {
 
       // Input Fields Error
       productNameError: false,
-      productPriceError: false,
+      productPriceError :false,
       dateFromError: false,
       dateToError: false,
 
@@ -103,14 +103,17 @@ export default function SignUp() {
       }
     }
 
-    if(state?.productPrice && state.productPriceCheck){
 
-      if(state.productPrice.match(productPriceRegex)){
-        setState({productPriceError:false});
-      }else{
+    console.log("Product Price",typeof state.productPrice);
+
+    if(state?.productPrice === "" && state?.productPriceCheck){
+
         setState({productPriceError:true});
-        
+      
       }
+      else{
+        
+        setState({productPriceError:false});
     }
 
 
@@ -128,9 +131,6 @@ export default function SignUp() {
       setState({dateToError:false});
     }
     
-
-
-
     let products = getDataFromLocalStorage("products");
     
     if(products === null){
@@ -162,7 +162,15 @@ export default function SignUp() {
   
 
   const handleImage = (event:any,imageNumber:any) =>{
+    if(imageNumber === "image1"){
+      alert("Image 1")
+    }else if(imageNumber === "image2"){
+      alert("Image 2")
     
+    }else if(imageNumber === "image3"){
+      alert("Image 3")
+      
+    }
     
     const file = event?.target?.files[0]
     
@@ -176,17 +184,6 @@ export default function SignUp() {
 
         if(typeof result === 'string'){
           
-
-
-          if(imageNumber === "image1"){
-            alert("Image 1")
-          }else if(imageNumber === "image2"){
-            alert("Image 2")
-          
-          }else if(imageNumber === "image3"){
-            alert("Image 3")
-            
-          }
 
 
           // if(state.base64Buffers.source1 === "" ){
@@ -214,6 +211,23 @@ export default function SignUp() {
  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 
 event.preventDefault()
+
+
+
+if(state?.productName){
+setState({productNameError:false})
+}else{
+
+  setState({productNameError:true})
+}
+
+if(state?.productPrice){
+setState({productPriceError:false})
+}else{
+
+  setState({productPriceError:true})
+} 
+
 
 if(
 
@@ -299,6 +313,7 @@ setState({
          
               <Grid item xs={12}>
                 <TextField
+                autoFocus
                   value={state?.productName ?? ""}
                   required
                   fullWidth
@@ -327,7 +342,7 @@ setState({
                   label="Prodcut Price"
                   name="productPrice"
                   autoComplete="product price"
-                  // helperText={ state?.productPriceError ? "Price must be in Numbers" :  ""}
+                  helperText={ state?.productPriceError ? "Price must be Enter" :  ""}
                   onChange={(e) => {
 
                     const userInput = e?.target?.value;
