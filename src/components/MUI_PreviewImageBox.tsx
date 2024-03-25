@@ -114,12 +114,7 @@ export default function MUIPreviewImagesBox({imageSource,handleImage,cancelImage
     width: 1,
   });
 
-  const handleAddIconClick = () => {
-    const fileInput = document.getElementById('file-input');
-    if (fileInput) {
-      fileInput.click();
-    }
-  };
+
 
   return (
     
@@ -177,7 +172,7 @@ export default function MUIPreviewImagesBox({imageSource,handleImage,cancelImage
               >
            {image.url === defaultImage && 
               <label>
-            <VisuallyHiddenInput type="file" accept='image/*' onChange={(e)=>handleImage(e,image.name)}/>
+            <VisuallyHiddenInput type="file" accept='.png, .jpeg, .jpg, .svg' onChange={(e)=>handleImage(e,image.name)}/>
 
             <AddCircleIcon sx={{fontSize:"2.5vw",cursor:'pointer'}} />
             </label>}

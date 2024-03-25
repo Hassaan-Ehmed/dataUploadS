@@ -97,6 +97,7 @@ export default function SignUp() {
 
   React.useEffect(()=>{
 
+try{
 
     if(state?.productName && state.productNameCheck ){
 
@@ -121,8 +122,6 @@ export default function SignUp() {
       }
       }
      
-
-
 
     if(state.dateFrom > state.dateTo ){
 
@@ -158,10 +157,14 @@ export default function SignUp() {
     }
     
     
+}catch(error){
+  console.log("Error in Form's useEffect()",error);
+}
+    
     },[state.productName,state.productPrice,state.dateFrom,state.dateTo,state.base64Buffers.source1,state.base64Buffers.source2,state.base64Buffers.source3])
 
     
-  React.useEffect(()=> { handleID() },[]);
+  // React.useEffect(()=> { handleID() },[]);
 
 
   const VisuallyHiddenInput = styled('input')({
@@ -179,8 +182,10 @@ export default function SignUp() {
 
   const handleImage = (event:any,imageNumber:any) =>{
  
-    // alert("Hellooooooo");
+try{
+  
     if (event && event.target && event.target.files && event.target.files[0]) {
+
     const file = event?.target?.files[0]
     
     if(file && file instanceof Blob){
@@ -241,14 +246,19 @@ export default function SignUp() {
     
     }
   }
-  }
+
+}catch(error){
+  console.log("Error in Form's handleImage()",error);
+}
+ 
+}
 
 
  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 
 event.preventDefault()
 
-
+try{
 
 
 if(state?.productName && state.productName.match(productNameRegex)){
@@ -284,15 +294,15 @@ if(
 
 if(
 
-  state?.productName &&
-  state?.productPrice &&
-  state?.dateFrom &&
-  state?.dateTo &&
-  ((state.productNameError == false) 
-  &&  (state?.productPriceError == false) 
-  && (state?.imageError == false)
-  && (state?.dateFromError == false && state?.dateToError == false)
-  ) 
+  state?.productName
+  && state?.productPrice
+  && state?.dateFrom
+  && state?.dateTo 
+  && (state.productNameError == false)
+  && (state.productPriceError  == false)
+  && (state.imageError== false)   
+  && (state.dateFromError == false)
+  && (state?.dateToError== false)  
 
   )
   {
@@ -304,14 +314,16 @@ const readyObj = {
  dateFrom : state?.dateFrom,
  dateTo  : state?.dateTo,
  imageSources:{
-  source1 : state?.base64Buffers.source1 || defaultImage,
-  source2 : state?.base64Buffers.source2 || defaultImage ,
-  source3 : state?.base64Buffers.source3 || defaultImage 
+  source1 : state?.base64Buffers.source1 ,
+  source2 : state?.base64Buffers.source2 ,
+  source3 : state?.base64Buffers.source3 
  } 
 
 }
 
 saveDataToLocalStorage("products",[...productInfoBox,readyObj]);
+
+
 setState({
   productName: "",
   productPrice: "",
@@ -331,6 +343,11 @@ setState({
   }
 
  }
+
+}catch(error){
+  console.log("Error in handleSubmit()",error)
+}
+
 }
 
  const handleID=()=>{
@@ -343,6 +360,9 @@ setState({
  }
  
  const cancelImage=(imageNumber:string)=>{
+
+try{
+
 
 if(imageNumber === 'image1'){
   setState({base64Buffers:{
@@ -362,6 +382,10 @@ else if (imageNumber === "image3"){
     ...state?.base64Buffers,
     source3:""
   }})
+}
+
+}catch(error){
+  console.log("Error in cancelImage()",error);
 }
 
  }
